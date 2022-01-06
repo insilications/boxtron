@@ -5,17 +5,14 @@
 %define keepstatic 1
 Name     : boxtron
 Version  : 0.5.4
-Release  : 267
+Release  : 269
 URL      : file:///aot/build/clearlinux/packages/boxtron/boxtron-v0.5.4.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/boxtron/boxtron-v0.5.4.tar.gz
 Summary  : Steam Play Compatibility tool to run DOS games
 Group    : Development/Tools
 License  : GPL-2.0
-BuildRequires : pypi(coverage)
-BuildRequires : pypi(mypy)
-BuildRequires : pypi(pycodestyle)
-BuildRequires : pypi(pylint)
-BuildRequires : pypi(yapf)
+Requires: boxtron-bin = %{version}-%{release}
+Requires: boxtron-data = %{version}-%{release}
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
@@ -23,6 +20,31 @@ BuildRequires : pypi(yapf)
 %description
 Boxtron is a compatibility tool to run DOS games via Steam or other GUI
 game launchers using native Linux DOSBox.
+
+%package bin
+Summary: bin components for the boxtron package.
+Group: Binaries
+Requires: boxtron-data = %{version}-%{release}
+
+%description bin
+bin components for the boxtron package.
+
+
+%package data
+Summary: data components for the boxtron package.
+Group: Data
+
+%description data
+data components for the boxtron package.
+
+
+%package doc
+Summary: doc components for the boxtron package.
+Group: Documentation
+
+%description doc
+doc components for the boxtron package.
+
 
 %prep
 %setup -q -n boxtron
@@ -34,7 +56,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1641492999
+export SOURCE_DATE_EPOCH=1641493214
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -120,11 +142,11 @@ export PLASMA_USE_QT_SCALING=1
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export GSETTINGS_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
 ## altflags1 end
-make  %{?_smp_mflags}   PREFIX=/usr V=1 VERBOSE=1
+make  %{?_smp_mflags}   PREFIX=/usr || : V=1 VERBOSE=1
 
 
 %install
-export SOURCE_DATE_EPOCH=1641492999
+export SOURCE_DATE_EPOCH=1641493214
 rm -rf %{buildroot}
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
@@ -211,7 +233,37 @@ export PLASMA_USE_QT_SCALING=1
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 export GSETTINGS_SCHEMA_DIR="/usr/share/glib-2.0/schemas"
 ## altflags1 end
-%make_install PREFIX=/usr
+%make_install prefix=/usr
 
 %files
 %defattr(-,root,root,-)
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/install-gog-game
+
+%files data
+%defattr(-,root,root,-)
+/usr/share/boxtron/confgen.py
+/usr/share/boxtron/cuescanner.py
+/usr/share/boxtron/fakescripteval.py
+/usr/share/boxtron/fakesierralauncher.py
+/usr/share/boxtron/log.py
+/usr/share/boxtron/midi.py
+/usr/share/boxtron/preconfig.py
+/usr/share/boxtron/preconfig.tar
+/usr/share/boxtron/run-dosbox
+/usr/share/boxtron/settings.py
+/usr/share/boxtron/toolbox.py
+/usr/share/boxtron/toolmanifest.vdf
+/usr/share/boxtron/tweaks.py
+/usr/share/boxtron/version.py
+/usr/share/boxtron/winpathlib.py
+/usr/share/boxtron/xdg.py
+/usr/share/boxtron/xlib.py
+/usr/share/licenses/boxtron/LICENSE
+/usr/share/steam/compatibilitytools.d/boxtron.vdf
+
+%files doc
+%defattr(0644,root,root,0755)
+%doc /usr/share/doc/boxtron/*
