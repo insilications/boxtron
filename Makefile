@@ -1,5 +1,5 @@
 PKG_NAME := boxtron
-URL = https://github.com/dosbox-staging/dosbox-staging.git
+URL = https://github.com/dreamer/boxtron.git
 ARCHIVES = 
 ARCHIVES_GIT = 
 
